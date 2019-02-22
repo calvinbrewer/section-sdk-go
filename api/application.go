@@ -44,7 +44,7 @@ func (c *client) ApplicationCreate(accountID int, hostname string, origin string
 	}
 
 	req := &ApplicationCreateRequest{
-		request:   c.newRequest("/account/" + strconv.Itoa(accountID) + "/application/create"),
+		request:   c.newRequest(),
 		Hostname:  hostname,
 		Origin:    origin,
 		StackName: stackname,
