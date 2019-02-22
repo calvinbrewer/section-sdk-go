@@ -4,28 +4,10 @@ import (
 	"github.com/pkg/errors"
 )
 
-type Application struct {
+type accountApplication struct {
 	ApplicationID   int    `json:"id"`
 	Href            string `json:"href"`
 	ApplicationName string `json:"application_name"`
-}
-
-type Account struct {
-	AccountID   int    `json:"id"`
-	Href        string `json:"href"`
-	AccountName string `json:"account_name"`
-	Requires2FA bool   `json:"requires_2fa"`
-	BillingUser int    `json:"billing_user"`
-	Owner       struct {
-		ID          int    `json:"id"`
-		FirstName   string `json:"first_name"`
-		LastName    string `json:"last_name"`
-		Email       string `json:"email"`
-		Verified    bool   `json:"verified"`
-		CompanyName string `json:"company_name"`
-		PhoneNumber string `json:"phone_number"`
-	} `json:"owner"`
-	Applications []Application `json:"applications"`
 }
 
 type accountCreateRequest struct {
@@ -38,21 +20,10 @@ type accountCreateRequest struct {
 
 type accountCreateResponse struct {
 	response
-	AccountID   int    `json:"id"`
-	Href        string `json:"href"`
-	AccountName string `json:"account_name"`
-	Requires2FA bool   `json:"requires_2fa"`
-	BillingUser int    `json:"billing_user"`
-	Owner       struct {
-		ID          int    `json:"id"`
-		FirstName   string `json:"first_name"`
-		LastName    string `json:"last_name"`
-		Email       string `json:"email"`
-		Verified    bool   `json:"verified"`
-		CompanyName string `json:"company_name"`
-		PhoneNumber string `json:"phone_number"`
-	} `json:"owner"`
-	Applications []Application `json:"applications"`
+	AccountID    int                  `json:"id"`
+	Href         string               `json:"href"`
+	AccountName  string               `json:"account_name"`
+	Applications []accountApplication `json:"applications"`
 }
 
 func (c *client) AccountCreate(name string, hostname string, origin string, stackname string) (*accountCreateResponse, error) {
