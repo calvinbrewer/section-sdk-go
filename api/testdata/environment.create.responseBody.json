@@ -1,0 +1,13 @@
+{
+  "id": 1234,
+  "href": "/api/v1/account/1469/application/4567/environment/Production",
+  "environment_name": "Production",
+  "domains": [
+    {
+      "name": "www.test.com",
+      "zoneName": "test.com",
+      "cname": "www.test.com.c.section.io"
+    }
+  ],
+  "is_hosted": false
+}

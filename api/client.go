@@ -26,7 +26,7 @@ type client struct {
 type Client interface {
 	AccountCreate(name string, hostname string, origin string, stackname string) (*accountCreateResponse, error)
 	// ApplicationCreate(hostname string, origin string, stackname string) (*CreatedApplication, error)
-	// EnvironmentCreate(name string, sourceenvironmentname string, domainname string) (*CreatedEnvironment, error)
+	EnvironmentCreate(accountID int, applicationID int, name, sourceEnvironmentName, domainName string) (*environmentCreateResponse, error)
 }
 
 const (
