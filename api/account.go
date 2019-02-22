@@ -4,12 +4,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-type Application struct {
-	ApplicationID   int    `json:"id"`
-	Href            string `json:"href"`
-	ApplicationName string `json:"application_name"`
-}
-
 type Account struct {
 	AccountID   int    `json:"id"`
 	Href        string `json:"href"`
