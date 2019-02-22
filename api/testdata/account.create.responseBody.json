@@ -1,16 +1,12 @@
 {
-    "id": 1469,
-    "href": "/api/v1/account/1469",
-    "account_name": "CJTest",
-    "requires_2fa": false,
-    "billing_user": 2176,
-    "owner": {
-      "id": 2176,
-      "first_name": "CJ",
-      "last_name": "Brewer",
-      "email": "cj@section.io",
-      "verified": true,
-      "company_name": "Section",
-      "phone_number": "+17209876537"
+  "id": 1469,
+  "href": "/api/v1/account/1469",
+  "account_name": "CJTest",
+  "applications": [
+    {
+      "id": 4567,
+      "href": "/api/v1/account/1469/application/4567",
+      "application_name": "www.test.com"
     }
-  }
+  ]
+}

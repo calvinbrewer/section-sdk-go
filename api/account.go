@@ -14,8 +14,8 @@ type Account struct {
 	AccountID   int    `json:"id"`
 	Href        string `json:"href"`
 	AccountName string `json:"account_name"`
-	Requires2FA string `json:"requires_2fa"`
-	BillingUser string `json:"billing_user"`
+	Requires2FA bool   `json:"requires_2fa"`
+	BillingUser int    `json:"billing_user"`
 	Owner       struct {
 		ID          int    `json:"id"`
 		FirstName   string `json:"first_name"`
@@ -28,16 +28,6 @@ type Account struct {
 	Applications []Application `json:"applications"`
 }
 
-type accountGetRequest struct {
-	request
-	AccountID int `json:"id"`
-}
-
-type accountGetResponse struct {
-	response
-	Account *Account `json:"account"`
-}
-
 type accountCreateRequest struct {
 	request
 	Name      string `json:"name"`
@@ -48,33 +38,24 @@ type accountCreateRequest struct {
 
 type accountCreateResponse struct {
 	response
-	Account Account
+	AccountID   int    `json:"id"`
+	Href        string `json:"href"`
+	AccountName string `json:"account_name"`
+	Requires2FA bool   `json:"requires_2fa"`
+	BillingUser int    `json:"billing_user"`
+	Owner       struct {
+		ID          int    `json:"id"`
+		FirstName   string `json:"first_name"`
+		LastName    string `json:"last_name"`
+		Email       string `json:"email"`
+		Verified    bool   `json:"verified"`
+		CompanyName string `json:"company_name"`
+		PhoneNumber string `json:"phone_number"`
+	} `json:"owner"`
+	Applications []Application `json:"applications"`
 }
 
-func (c *client) AccountGet(AccountID int) (*Account, error) {
-	if AccountID == 0 {
-		return nil, errors.New("AccountID parameter is required.")
-	}
-
-	req := &accountGetRequest{
-		request:   c.newRequest("Account.get"),
-		AccountID: AccountID,
-	}
-
-	var resp accountGetResponse
-	err := c.httpPostJson(req, &resp)
-	if err != nil {
-		return nil, errors.Wrapf(err, "AccountGet request failed for Account Id '%d'.", AccountID)
-	}
-
-	if resp.Code != "OK" || resp.Account == nil {
-		return nil, newAPIError(resp.response, nil)
-	}
-
-	return resp.Account, nil
-}
-
-func (c *client) AccountCreate(name string, hostname string, origin string, stackname string) (*Account, error) {
+func (c *client) AccountCreate(name string, hostname string, origin string, stackname string) (*accountCreateResponse, error) {
 	if name == "" {
 		return nil, errors.New("name parameter is required")
 	}
@@ -100,7 +81,7 @@ func (c *client) AccountCreate(name string, hostname string, origin string, stac
 	}
 
 	var resp accountCreateResponse
-	err := c.httpPostJson(req, &resp)
+	err := c.httpPostJson("/account/create", req, &resp)
 	if err != nil {
 		return nil, errors.Wrap(err, "AccountCreate request failed.")
 	}
@@ -109,5 +90,5 @@ func (c *client) AccountCreate(name string, hostname string, origin string, stac
 		return nil, errors.New(resp.Message)
 	}
 
-	return &resp.Account, nil
+	return &resp, nil
 }

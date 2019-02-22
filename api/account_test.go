@@ -14,7 +14,7 @@ func TestAccountCreate(t *testing.T) {
 	const origin = "origin.test.com"
 	const stackname = "stack"
 
-	responseBody := getTestDataString(t, "account.get.responseBody.json")
+	responseBody := getTestDataString(t, "account.create.responseBody.json")
 
 	client := getTestClient(t)
 
@@ -27,6 +27,7 @@ func TestAccountCreate(t *testing.T) {
 	assert.Nil(t, err, "AccountCreate error")
 
 	assert.Equal(t, 1469, accountResp.AccountID, "accountID")
+	assert.Equal(t, 4567, accountResp.Applications[0].ApplicationID, "applicationID")
 
 	assert.True(t, gock.IsDone(), "gock.IsDone")
 }

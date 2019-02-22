@@ -22,14 +22,9 @@ func newAPIError(resp response, err error) *APIError {
 	result := &APIError{
 		Err: err,
 	}
-	if resp.Debug != "" {
-		result.Message = resp.Debug
-		return result
-	}
 	if resp.Message != "" {
 		result.Message = resp.Message
 		return result
 	}
-	result.Message = resp.Code
 	return result
 }
