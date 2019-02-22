@@ -21,30 +21,30 @@ type Account struct {
 	} `json:"owner"`
 }
 
-type accountGetRequest struct {
+type accountCreateRequest struct {
 	request
 	AccountID int `json:"id"`
 }
 
-type accountGetResponse struct {
+type accountCreateResponse struct {
 	response
-	Account *Account `json:"account"`
+	Account *Account
 }
 
-func (c *client) AccountGet(AccountID int) (*Account, error) {
+func (c *client) AccountCreate(AccountID int) (*Account, error) {
 	if AccountID == 0 {
 		return nil, errors.New("AccountID parameter is required.")
 	}
 
-	req := &accountGetRequest{
+	req := &accountCreateRequest{
 		request:   c.newRequest("Account.get"),
 		AccountID: AccountID,
 	}
 
-	var resp accountGetResponse
-	err := c.httpPostJson(req, &resp)
+	var resp accountCreateResponse
+	err := c.httpPostJson("/account/create", req, &resp)
 	if err != nil {
-		return nil, errors.Wrapf(err, "AccountGet request failed for Account Id '%d'.", AccountID)
+		return nil, errors.Wrapf(err, "AccountCreate request failed for Account Id '%d'.", AccountID)
 	}
 
 	if resp.Code != "OK" || resp.Account == nil {

@@ -29,18 +29,13 @@ type client struct {
 }
 
 type Client interface {
-	// AccountCreate(name string, hostname string, origin string, stackname string) (*CreatedAccount, error)
-	AccountGet(accountID int) (*Account, error)
-
+	AccountCreate(name string, hostname string, origin string, stackname string) (*Account, error)
 	// ApplicationCreate(hostname string, origin string, stackname string) (*CreatedApplication, error)
-	// ApplicationGet(applicationId string) (*Application, error)
-
 	// EnvironmentCreate(name string, sourceenvironmentname string, domainname string) (*CreatedEnvironment, error)
-	// EnvironmentGet(environmentId string) (*Environment, error)
 }
 
 const (
-	DefaultAddress = "https://aperture.section.io/api/v1/"
+	DefaultAddress = "https://aperture.section.io/api/v1"
 )
 
 func NewClient(user string, password string) (Client, error) {
@@ -77,8 +72,16 @@ func (c client) newRequest(command string) request {
 	}
 }
 
-func (c client) httpPost(requestBody []byte) (responseBody []byte, outErr error) {
-	response, err := http.Post(c.address, "application/json", bytes.NewReader(requestBody))
+func (c client) httpPost(uri string, requestBody []byte) (responseBody []byte, outErr error) {
+	httpClient := &http.Client{}
+
+	req, err := http.NewRequest("POST", c.address+uri, bytes.NewReader(requestBody))
+
+	req.Header.Add("Content-Type", "application/json")
+	req.SetBasicAuth(c.user, c.password)
+
+	response, err := httpClient.Do(req)
+
 	if err != nil {
 		return nil, errors.Wrap(err, "HTTP POST failed for request.")
 	}
@@ -92,14 +95,14 @@ func (c client) httpPost(requestBody []byte) (responseBody []byte, outErr error)
 	return body, nil
 }
 
-func (c client) httpPostJson(req interface{}, resp interface{}) error {
+func (c client) httpPostJson(uri string, req interface{}, resp interface{}) error {
 
 	reqBody, err := json.Marshal(req)
 	if err != nil {
 		return errors.Wrapf(err, "Failed to JSON encode request: %v", req)
 	}
 
-	respBody, err := c.httpPost(reqBody)
+	respBody, err := c.httpPost(uri, reqBody)
 	if err != nil {
 		return errors.Wrapf(err, "Failed to HTTP POST request: %v", req)
 	}

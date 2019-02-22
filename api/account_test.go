@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	gock "gopkg.in/h2non/gock.v1"
 )
 
 func TestAccountGet(t *testing.T) {
@@ -15,14 +16,14 @@ func TestAccountGet(t *testing.T) {
 	client := getTestClient(t)
 
 	gock.New("https://aperture.section.io").
-		Post("/api/v1/account/" + accountID).
+		Post("/api/v1/account/create").
 		Reply(200).
 		BodyString(responseBody)
 
 	account, err := client.AccountGet(accountID)
 	assert.Nil(t, err, "AccountGet error")
 
-	assert.Equal(t, 1469, account.id, "accountID")
+	assert.Equal(t, 1469, account.AccountID, "accountID")
 
 	assert.True(t, gock.IsDone(), "gock.IsDone")
 }
