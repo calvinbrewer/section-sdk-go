@@ -44,7 +44,7 @@ func (c *client) AccountCreate(name string, hostname string, origin string, stac
 	}
 
 	req := &accountCreateRequest{
-		request:   c.newRequest("/account/create"),
+		request:   c.newRequest(),
 		Name:      name,
 		Hostname:  hostname,
 		Origin:    origin,

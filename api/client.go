@@ -11,9 +11,6 @@ import (
 )
 
 type request struct {
-	UserEmail    string `json:"APIUSER"`
-	UserPassword string `json:"APIPassword"`
-	Command      string `json:"cmd"`
 }
 
 type response struct {
@@ -58,16 +55,8 @@ func safeClose(c io.Closer, err *error) {
 	}
 }
 
-func (c client) newRequest(command string) request {
-	if command == "" {
-		panic("command is required.")
-	}
-
-	return request{
-		UserEmail:    c.user,
-		UserPassword: c.password,
-		Command:      command,
-	}
+func (c client) newRequest() request {
+	return request{}
 }
 
 func (c client) httpPost(uri string, requestBody []byte) (responseBody []byte, outErr error) {
