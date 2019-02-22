@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "href": "/api/v1/account/1/application/1",
+  "application_name": "www.test.com",
+  "path_prefix": "/",
+  "path_prefixes": [
+    "/"
+  ]
+}
