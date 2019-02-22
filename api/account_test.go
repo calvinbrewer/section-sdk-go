@@ -1,28 +1,32 @@
 package api
 
 import (
-	"testing"
-
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/h2non/gock.v1"
+	"testing"
 )
 
-func TestAccountGet(t *testing.T) {
+func TestAccountCreate(t *testing.T) {
 	defer gock.Off()
 
-	const accountID = 1469
+	const name = "test"
+	const hostname = "www.test.com"
+	const origin = "origin.test.com"
+	const stackname = "stack"
+
 	responseBody := getTestDataString(t, "account.get.responseBody.json")
 
 	client := getTestClient(t)
 
 	gock.New("https://aperture.section.io").
-		Post("/api/v1/account/" + accountID).
+		Post("/api/v1/account/create").
 		Reply(200).
 		BodyString(responseBody)
 
-	account, err := client.AccountGet(accountID)
-	assert.Nil(t, err, "AccountGet error")
+	accountResp, err := client.AccountCreate(name, hostname, origin, stackname)
+	assert.Nil(t, err, "AccountCreate error")
 
-	assert.Equal(t, 1469, account.id, "accountID")
+	assert.Equal(t, 1469, accountResp.AccountID, "accountID")
 
 	assert.True(t, gock.IsDone(), "gock.IsDone")
 }

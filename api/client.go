@@ -29,7 +29,7 @@ type client struct {
 }
 
 type Client interface {
-	// AccountCreate(name string, hostname string, origin string, stackname string) (*CreatedAccount, error)
+	AccountCreate(name string, hostname string, origin string, stackname string) (*Account, error)
 	AccountGet(accountID int) (*Account, error)
 
 	// ApplicationCreate(hostname string, origin string, stackname string) (*CreatedApplication, error)
@@ -40,7 +40,7 @@ type Client interface {
 }
 
 const (
-	DefaultAddress = "https://aperture.section.io/api/v1/"
+	DefaultAddress = "https://aperture.section.io/api/v1"
 )
 
 func NewClient(user string, password string) (Client, error) {
